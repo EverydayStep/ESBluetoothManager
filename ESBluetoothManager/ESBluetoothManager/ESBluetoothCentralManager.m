@@ -37,7 +37,9 @@
 }
 
 - (void)stopScan {
-    [self.central stopScan];
+    if(self.central.isScanning) {
+        [self.central stopScan];
+    }
 }
 
 #pragma mark - Connect
@@ -197,5 +199,10 @@
     if (self.delegate && [self.delegate respondsToSelector:@selector(bluetoothCentralManager:peripheral:didWriteValueForCharacteristic:error:)]) {
         [self.delegate bluetoothCentralManager:self peripheral:peripheral didWriteValueForCharacteristic:characteristic error:error];
     }
+}
+
+#pragma mark - Setter && Getter
+- (CBManagerState)state {
+    return self.central.state;
 }
 @end

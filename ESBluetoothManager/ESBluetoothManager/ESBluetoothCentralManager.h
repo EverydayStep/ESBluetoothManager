@@ -111,6 +111,8 @@
 @interface ESBluetoothCentralManager : NSObject
 /** 外围设备 */
 @property (nonatomic, strong) CBPeripheral *peripheral;
+/** 手机蓝牙的状态 */
+@property (nonatomic, assign) CBManagerState state;
 @property (nonatomic, weak) id<ESBluetoothCentralManagerDelegate> delegate;
 
 + (ESBluetoothCentralManager *)manager;
