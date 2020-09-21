@@ -77,6 +77,9 @@
  */
 - (void)bluetoothCentralManager:(ESBluetoothCentralManager *)manager didDiscoverPeripheral:(CBPeripheral *)peripheral service:(CBService *)service characteristics:(NSArray<CBCharacteristic *> *)characteristics error:(NSError *)error;
 
+//************
+- (void)bluetoothCentralManager:(ESBluetoothCentralManager *)manager didDiscoverPeripheral:(CBPeripheral *)peripheral characteristic:(CBCharacteristic *)characteristic error:(NSError *)error;
+
 /**
  监听特征状态变化
 
@@ -96,6 +99,11 @@
  @param error 错误
  */
 - (void)bluetoothCentralManager:(ESBluetoothCentralManager *)manager peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error;
+
+
+
+
+- (void)bluetoothCentralManager:(ESBluetoothCentralManager *)manager peripheral:(CBPeripheral *)peripheral didUpdateValueForDescriptor:(CBDescriptor *)descriptor error:(NSError *)error;
 
 /**
  向特征值写数据结果
@@ -160,6 +168,8 @@
  @param service 搜索的服务
  */
 - (void)discoverPeripheral:(CBPeripheral *)peripheral characteristics:(NSArray *)characteristics forService:(CBService *)service;
+
+- (void)discoverPeripheral:(CBPeripheral *)peripheral descriptorsForCharacteristic:(CBCharacteristic *)characteristic;
 
 /**
  监听外围设备特征值

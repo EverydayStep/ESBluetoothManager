@@ -83,6 +83,18 @@
     [peripheral discoverCharacteristics:characteristics forService:service];
 }
 
+- (void)discoverPeripheral:(CBPeripheral *)peripheral descriptorsForCharacteristic:(CBCharacteristic *)characteristic {
+    if (!peripheral) {
+        NSError *error = [NSError errorWithDomain:@"周围设备不能为nil" code:-100 userInfo:nil];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(bluetoothCentralManager:didDiscoverPeripheral:service:characteristics:error:)]) {
+            [self.delegate bluetoothCentralManager:self didDiscoverPeripheral:peripheral service:nil characteristics:@[characteristic] error:error];
+        }
+        return;
+    }
+    [peripheral discoverDescriptorsForCharacteristic:characteristic];
+}
+
+
 #pragma mark - Notify
 - (void)notifyPeripheral:(CBPeripheral *)peripheral characteristic:(CBCharacteristic *)characteristic {
     if (!peripheral) {
@@ -180,6 +192,13 @@
     }
 }
 
+//发现服务特征信息
+- (void)peripheral:(CBPeripheral *)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(bluetoothCentralManager:didDiscoverPeripheral:characteristic:error:)]) {
+        [self.delegate bluetoothCentralManager:self didDiscoverPeripheral:peripheral characteristic:characteristic error:error];
+    }
+}
+
 //特征值监听状态变化
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     if (self.delegate && [self.delegate respondsToSelector:@selector(bluetoothCentralManager:peripheral:didUpdateNotificationStateForCharacteristic:error:)]) {
@@ -198,6 +217,12 @@
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     if (self.delegate && [self.delegate respondsToSelector:@selector(bluetoothCentralManager:peripheral:didWriteValueForCharacteristic:error:)]) {
         [self.delegate bluetoothCentralManager:self peripheral:peripheral didWriteValueForCharacteristic:characteristic error:error];
+    }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForDescriptor:(CBDescriptor *)descriptor error:(nullable NSError *)error {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(bluetoothCentralManager:peripheral:didUpdateValueForDescriptor:error:)]) {
+        [self.delegate bluetoothCentralManager:self peripheral:peripheral didUpdateValueForDescriptor:descriptor error:error];
     }
 }
 
